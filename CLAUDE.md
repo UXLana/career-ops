@@ -1,4 +1,6 @@
-# Career-Ops -- AI Job Search Pipeline
+# Career-Ops -- Lana Career Operating System
+
+Start by reading `AGENTS.md`. Lana local instructions override upstream defaults.
 
 ## Origin
 

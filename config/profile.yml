@@ -1,0 +1,88 @@
+# Career-Ops Profile Configuration
+# Lana-specific starter profile. Treat OpenBrain as the source of truth for
+# career memory, proof points, decisions, and prior positioning work.
+
+candidate:
+  full_name: "Lana Holston"
+  email: "TODO: add preferred career email"
+  phone: "TODO: add only when needed for final application materials"
+  location: "United States"
+  linkedin: "TODO: add LinkedIn URL"
+  portfolio_url: "TODO: add portfolio/case study hub"
+  github: "github.com/UXLana"
+  twitter: ""
+
+target_roles:
+  primary:
+    - "Director of UX"
+    - "Head of Design Systems"
+    - "Senior UX Design Lead"
+    - "Design Operations Lead"
+    - "AI Design Workflow Lead"
+  archetypes:
+    - name: "UX Leadership"
+      level: "Senior Lead/Director"
+      fit: "primary"
+    - name: "Design Systems Leadership"
+      level: "Lead/Principal/Director"
+      fit: "primary"
+    - name: "Accessibility and Compliance Design"
+      level: "Lead/Principal"
+      fit: "primary"
+    - name: "AI-Augmented Design Operations"
+      level: "Lead/Director"
+      fit: "secondary"
+    - name: "GovTech / RegTech Product Design"
+      level: "Lead/Principal/Director"
+      fit: "secondary"
+
+narrative:
+  headline: "UX Design Lead building compliant, scalable product systems for regulated software"
+  exit_story: "Currently building the UX practice at Metrc across design systems, accessibility compliance, and AI-augmented design workflows for a multi-state cannabis regulatory platform."
+  superpowers:
+    - "Building UX practices from the ground up"
+    - "Turning accessibility and compliance requirements into usable product systems"
+    - "Design system strategy from tokens to components to documentation"
+    - "AI-augmented design operations and agent workflow architecture"
+    - "Cross-functional product leadership in regulated enterprise environments"
+  proof_points:
+    - name: "MTR Design System"
+      url: "TODO: add case study or internal-safe summary"
+      hero_metric: "Design tokens to components to documentation for regulated product teams"
+    - name: "Accessibility Compliance Program"
+      url: "TODO: add sanitized artifact or VPAT-oriented summary"
+      hero_metric: "WCAG 2.2 AA, Section 508, ADA Title II readiness"
+    - name: "Council of Agents / OpenBrain Workflow"
+      url: "TODO: add portfolio-safe workflow case study"
+      hero_metric: "AI-augmented UX workflow across research, design systems, audits, and documentation"
+    - name: "UKG Experience"
+      url: "TODO: add relevant case study"
+      hero_metric: "7 years of enterprise product and UX experience before Metrc"
+
+compensation:
+  target_range: "TODO: define target total compensation"
+  currency: "USD"
+  minimum: "TODO: define walk-away number"
+  location_flexibility: "Remote preferred; define travel/on-site availability per role"
+
+location:
+  country: "United States"
+  city: "TODO: add city/state if desired"
+  timezone: "America/New_York"
+  visa_status: "No sponsorship needed"
+  onsite_availability: "TODO: define remote, hybrid, and travel boundaries"
+
+openbrain:
+  source_of_truth: true
+  recall_before:
+    - "role evaluation"
+    - "resume tailoring"
+    - "cover letter drafting"
+    - "portfolio proof point selection"
+    - "interview story selection"
+  remember_after:
+    - "positioning decisions"
+    - "new proof points"
+    - "role scoring calibrations"
+    - "interview stories"
+    - "application outcomes"

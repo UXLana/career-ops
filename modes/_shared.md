@@ -1,5 +1,15 @@
 # Shared Context -- career-ops
 
+## Lana Personalization Override
+
+This fork is personalized for Lana Holston. Use `AGENTS.md`, `docs/LANA_PERSONALIZATION_PLAN.md`, `docs/OPENBRAIN_PROTOCOL.md`, `config/profile.yml`, `cv.md`, and `article-digest.md` before using upstream defaults. OpenBrain is the source of truth for durable career memory; local files are working views.
+
+Primary archetypes: UX Leadership; Design Systems Leadership; Accessibility and Compliance Design; AI-Augmented Design Operations; GovTech / RegTech Product Design. Do not score Lana as an AI engineer unless the role explicitly combines design leadership with AI workflow strategy.
+
+Use this scoring rubric: Strategic Fit 20%; Domain Fit 15%; Design Systems Leverage 15%; Accessibility Leverage 15%; AI Workflow Leverage 10%; Leadership Scope 10%; Portfolio Story Strength 10%; Risk and Red Flags 5%. Priority roles score 4.5-5.0; strong roles 4.0-4.4; consider roles 3.5-3.9; skip below 3.5 unless Lana overrides.
+
+
+
 <!-- ============================================================
      HOW TO CUSTOMIZE THIS FILE
      ============================================================
