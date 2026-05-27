@@ -25,6 +25,8 @@ declare module '@lumen/design-system/components' {
 
   export const Badge: ComponentType<any>;
   export const Button: ComponentType<any>;
+  export const Chip: ComponentType<any>;
+  export const ChipGroup: ComponentType<any>;
   export const CollectionToolbar: ComponentType<any>;
   export const DataTable: ComponentType<any>;
   export const Input: ComponentType<any>;

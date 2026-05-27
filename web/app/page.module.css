@@ -3,18 +3,13 @@
   padding: 28px;
   overflow-x: hidden;
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 10%, transparent), transparent 340px),
+    radial-gradient(ellipse at top center, color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 12%, transparent), transparent 430px),
     var(--lumen-surface-light, #f4f3ee);
   color: var(--lumen-text-highEmphasis-onLight, #17211d);
 }
 
 .shell * {
   box-sizing: border-box;
-}
-
-.shell button {
-  border-radius: 14px !important;
-  letter-spacing: 0 !important;
 }
 
 .header {
@@ -40,27 +35,6 @@
   justify-content: flex-end;
 }
 
-.themeIconButton {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  background: transparent;
-  color: var(--lumen-text-midEmphasis-onLight, #5e5a51);
-  cursor: pointer;
-}
-
-.themeIconButton:hover,
-.themeIconButton:focus-visible {
-  color: var(--lumen-brand-default, #bd5d3a);
-  border-color: color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 42%, transparent);
-  outline: 2px solid color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 28%, transparent);
-  outline-offset: 1px;
-}
-
 .header h1 {
   margin: 12px 0 4px;
   font-family: var(--lumen-typo-fontFamilies-display);
@@ -70,7 +44,6 @@
 }
 
 .header p,
-.panelHeader p,
 .detailPanel p,
 .matchCard p {
   margin: 0;
@@ -81,7 +54,6 @@
 }
 
 .navBand,
-.statsGrid,
 .findGrid,
 .panel {
   max-width: 1440px;
@@ -92,22 +64,6 @@
   padding: 0 0 18px;
   overflow-x: auto;
   overflow-y: hidden;
-}
-
-.statsGrid {
-  margin-bottom: 16px;
-}
-
-.statsGrid > div {
-  width: 100%;
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px !important;
-}
-
-.statsGrid > div > div {
-  min-width: 0 !important;
-  width: 100%;
 }
 
 .workflowNav {
@@ -156,15 +112,6 @@
   min-width: 0;
 }
 
-.panelHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 18px;
-}
-
-.panelHeader h2,
 .detailPanel h2 {
   margin: 0 0 6px;
   font-family: var(--lumen-typo-fontFamilies-display);
@@ -196,25 +143,15 @@
   min-width: 0;
 }
 
-.resultsHeader {
+.applicationsActions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: flex-end;
   margin-bottom: 12px;
-}
-
-.resultsHeader h2 {
-  margin: 0;
-  font-family: var(--lumen-typo-fontFamilies-display);
-  font-size: 20px;
-  line-height: 28px;
-  letter-spacing: 0;
 }
 
 .searchCenter {
   max-width: 980px;
-  margin: 0 auto 18px;
+  margin: 0 auto 34px;
 }
 
 .searchBox {
@@ -252,24 +189,9 @@
   color: var(--lumen-text-lowEmphasis-onLight, #6f7a75);
 }
 
-.criteriaDisclosure {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-top: 8px;
-  border: 0;
-  background: transparent;
-  color: var(--lumen-brand-default, #bd5d3a);
-  cursor: pointer;
-  font-weight: 700;
-  letter-spacing: 0;
-}
-
-.criteriaDisclosure small {
-  color: var(--lumen-text-midEmphasis-onLight, #52605a);
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
+.starterChips {
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .srOnly {
@@ -367,6 +289,22 @@
   white-space: nowrap;
 }
 
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 2px 7px;
+  border: 1px solid color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 7%, var(--lumen-surface-light, #ffffff));
+  color: var(--lumen-text-midEmphasis-onLight, #52605a);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 14px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
 .company,
 .role {
   display: block;
@@ -393,7 +331,15 @@
 }
 
 .detailPanel > .actionRow {
-  margin-top: 18px;
+  margin-top: 30px;
+}
+
+.detailActions {
+  width: 100%;
+}
+
+.archiveAction {
+  margin-left: auto !important;
 }
 
 .detailPanel {
@@ -492,8 +438,7 @@
     padding: 18px;
   }
 
-  .header,
-  .panelHeader {
+  .header {
     flex-direction: column;
     align-items: stretch;
   }
@@ -510,10 +455,6 @@
   .findGrid,
   .applicationsLayout {
     grid-template-columns: 1fr;
-  }
-
-  .statsGrid > div {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .searchBox {

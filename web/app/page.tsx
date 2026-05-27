@@ -6,9 +6,9 @@ import { useThemeSwitcher } from '@lumen/design-system/styles/themes';
 import {
   Badge,
   Button,
+  Chip,
+  ChipGroup,
   DataTable,
-  StatsCard,
-  StatsCardGroup,
   TabBar,
   Textarea,
 } from '@lumen/design-system/components';
@@ -31,11 +31,6 @@ type Job = {
   reason: string;
   risk: string;
 };
-
-const views: TabItem[] = [
-  { id: 'find', label: 'Find Jobs', badge: 4 },
-  { id: 'applications', label: 'Applications', badge: 4 },
-];
 
 const jobs: Job[] = [
   {
@@ -92,18 +87,15 @@ const jobs: Job[] = [
   },
 ];
 
-const statusColor: Record<Status, 'neutral' | 'brand' | 'info' | 'success' | 'warning' | 'error'> = {
-  New: 'neutral',
-  Review: 'brand',
-  Evaluating: 'info',
-  Applied: 'success',
-  Interview: 'warning',
-  Declined: 'neutral',
-  Rejected: 'error',
-  Archived: 'neutral',
-};
+const searchStarters = [
+  'Design systems leadership',
+  'Accessibility compliance',
+  'AI design operations',
+  'GovTech / RegTech UX',
+  'Enterprise UX architecture',
+];
 
-function Icon({ name }: { name: 'search' | 'briefcase' | 'letter' | 'spark' | 'sun' | 'moon' }) {
+function Icon({ name }: { name: 'search' | 'briefcase' | 'letter' | 'archive' | 'spark' | 'sun' | 'moon' }) {
   const paths = {
     search: (
       <>
@@ -122,6 +114,13 @@ function Icon({ name }: { name: 'search' | 'briefcase' | 'letter' | 'spark' | 's
       <>
         <path d="M4 6h16v12H4z" />
         <path d="M4 7l8 6 8-6" />
+      </>
+    ),
+    archive: (
+      <>
+        <rect x="3.5" y="4.5" width="17" height="4.5" rx="1.3" />
+        <path d="M5.5 9v9.5a1.8 1.8 0 0 0 1.8 1.8h9.4a1.8 1.8 0 0 0 1.8-1.8V9" />
+        <path d="M9.5 13h5" />
       </>
     ),
     spark: (
@@ -158,11 +157,7 @@ function Icon({ name }: { name: 'search' | 'briefcase' | 'letter' | 'spark' | 's
 }
 
 function StatusBadge({ status }: { status: Status }) {
-  return (
-    <Badge color={statusColor[status]} variant="subtle" size="sm">
-      {status}
-    </Badge>
-  );
+  return <span className={styles.statusBadge}>{status}</span>;
 }
 
 function ScoreBadge({ score, showLabel = false }: { score: number; showLabel?: boolean }) {
@@ -185,15 +180,30 @@ function ThemeToggle() {
   const nextTheme = activeTheme === 'light' ? 'dark' : 'light';
 
   return (
-    <button
-      type="button"
+    <Button
+      emphasis="low"
+      iconOnly
+      leftIcon={<Icon name={activeTheme === 'light' ? 'moon' : 'sun'} />}
       aria-label={activeTheme === 'light' ? 'Use dark theme' : 'Use Claude light theme'}
       title={activeTheme === 'light' ? 'Dark theme' : 'Claude light theme'}
-      className={styles.themeIconButton}
       onClick={() => applyTheme(nextTheme)}
-    >
-      <Icon name={activeTheme === 'light' ? 'moon' : 'sun'} />
-    </button>
+    />
+  );
+}
+
+function SemanticCriteriaButton({ expanded, onClick }: { expanded: boolean; onClick: () => void }) {
+  return (
+    <Button
+      emphasis="low"
+      iconOnly
+      leftIcon={<Icon name="spark" />}
+      aria-label="Semantic criteria"
+      aria-expanded={expanded}
+      aria-haspopup="dialog"
+      aria-controls="semantic-criteria-dialog"
+      title="Semantic criteria"
+      onClick={onClick}
+    />
   );
 }
 
@@ -284,12 +294,19 @@ function JobDetailPanel({
           </Badge>
         ))}
       </div>
-      <div className={styles.actionRow}>
-        <Button emphasis="mid">{mode === 'application' ? 'Update status' : 'Move to evaluation'}</Button>
-        <Button emphasis="mid" onClick={onToggleCoverLetter}>
+      <div className={`${styles.actionRow} ${styles.detailActions}`}>
+        <Button emphasis="mid">{mode === 'application' ? 'Update status' : 'Evaluate'}</Button>
+        <Button emphasis="low" onClick={onToggleCoverLetter}>
           {showCoverLetter ? 'Hide letter' : 'Draft letter'}
         </Button>
-        <Button emphasis="low">Archive</Button>
+        <Button
+          emphasis="low"
+          iconOnly
+          leftIcon={<Icon name="archive" />}
+          aria-label="Archive"
+          title="Archive"
+          className={styles.archiveAction}
+        />
       </div>
 
       {showCoverLetter && <CoverLetterDraft job={job} />}
@@ -308,8 +325,13 @@ export default function Home() {
   );
 
   const selectedJob = jobs.find((job) => job.id === selectedJobId) ?? jobs[0];
-  const evaluatingCount = jobs.filter((job) => job.status === 'Review' || job.status === 'Evaluating').length;
-  const priorityCount = jobs.filter((job) => job.score >= 4.5).length;
+  const workflowTabs = useMemo<TabItem[]>(
+    () => [
+      { id: 'find', label: 'Find Jobs', badge: jobs.length },
+      { id: 'applications', label: 'Applications', badge: jobs.length },
+    ],
+    [],
+  );
 
   useEffect(() => {
     if (!showSearchSpec) {
@@ -376,10 +398,14 @@ export default function Home() {
     <main className={styles.shell}>
       <header className={styles.header}>
         <div>
-          <h1>Career-Ops</h1>
+          <h1>Product Design</h1>
           <p>Semantic job discovery for fewer, better applications.</p>
         </div>
         <div className={styles.headerActions}>
+          <SemanticCriteriaButton
+            expanded={showSearchSpec}
+            onClick={() => setShowSearchSpec((value) => !value)}
+          />
           <ThemeToggle />
         </div>
       </header>
@@ -401,17 +427,18 @@ export default function Home() {
             Search
           </Button>
         </div>
-        <button
-          type="button"
-          className={styles.criteriaDisclosure}
-          aria-expanded={showSearchSpec}
-          aria-haspopup="dialog"
-          aria-controls="semantic-criteria-dialog"
-          onClick={() => setShowSearchSpec((value) => !value)}
-        >
-          <span>Semantic criteria</span>
-          <small>Open</small>
-        </button>
+        <ChipGroup className={styles.starterChips} aria-label="Conversation starters">
+          {searchStarters.map((starter) => (
+            <Chip
+              key={starter}
+              size="md"
+              selected={searchQuery === starter}
+              onSelect={() => setSearchQuery(starter)}
+            >
+              {starter}
+            </Chip>
+          ))}
+        </ChipGroup>
       </section>
 
       {showSearchSpec && (
@@ -452,19 +479,10 @@ export default function Home() {
         </div>
       )}
 
-      <section className={styles.statsGrid} aria-label="Pipeline summary">
-        <StatsCardGroup>
-          <StatsCard label="Pending matches" value={jobs.length} icon={<Icon name="search" />} />
-          <StatsCard label="In review" value={evaluatingCount} icon={<Icon name="briefcase" />} />
-          <StatsCard label="Priority fit" value={priorityCount} icon={<Icon name="spark" />} />
-          <StatsCard label="Drafts started" value="1" icon={<Icon name="letter" />} />
-        </StatsCardGroup>
-      </section>
-
-      <section className={styles.navBand} aria-label="Career-Ops workflows">
+      <section className={styles.navBand} aria-label="Product Design workflows">
         <div className={styles.workflowNav}>
           <TabBar
-            tabs={views}
+            tabs={workflowTabs}
             activeTab={activeView}
             onTabChange={(id: string) => setActiveView(id as ViewId)}
             align="left"
@@ -477,12 +495,6 @@ export default function Home() {
         <>
           <section className={styles.findGrid}>
             <div className={styles.resultsColumn}>
-              <div className={styles.resultsHeader}>
-                <h2>Semantic matches</h2>
-                <Button emphasis="mid" onClick={() => setActiveView('applications')}>
-                  Evaluate selected
-                </Button>
-              </div>
               <div className={styles.matchList}>
                 {jobs.map((job) => (
                   <MatchCard
@@ -507,11 +519,7 @@ export default function Home() {
 
       {activeView === 'applications' && (
         <section className={styles.applicationsView}>
-          <div className={styles.panelHeader}>
-            <div>
-              <h2>Applied jobs</h2>
-              <p>Select a job to review its fit, source, risks, and next step in context.</p>
-            </div>
+          <div className={styles.applicationsActions}>
             <Button emphasis="mid">Add role</Button>
           </div>
           <div className={styles.applicationsLayout}>

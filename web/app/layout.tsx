@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'Career-Ops',
+  title: 'Product Design',
   description: 'Semantic job discovery for Lana',
 };
 
