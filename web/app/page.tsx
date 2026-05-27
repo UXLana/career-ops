@@ -32,7 +32,11 @@ type Job = {
   risk: string;
 };
 
-const jobs: Job[] = [
+type DiscoveryCandidate = Job & {
+  discoveryTerms: string[];
+};
+
+const savedApplicationJobs: Job[] = [
   {
     id: 'launchdarkly-director-ux',
     company: 'LaunchDarkly',
@@ -87,6 +91,121 @@ const jobs: Job[] = [
   },
 ];
 
+const discoveryCatalog: DiscoveryCandidate[] = [
+  {
+    id: 'launchdarkly-director-ux',
+    company: 'LaunchDarkly',
+    role: 'Director, UX',
+    score: 4.6,
+    status: 'New',
+    source: 'Simulated employer-page discovery',
+    lane: 'UX leadership',
+    comp: '$256k-$415k + equity',
+    signals: ['developer tools', 'platform UX', 'remote US'],
+    discoveryTerms: ['design', 'systems', 'leadership', 'platform', 'enterprise', 'developer'],
+    reason: 'Strong fit for design leadership in a complex product surface with high leverage across platform workflows.',
+    risk: 'Needs employer-page confirmation before application.',
+  },
+  {
+    id: 'sentinelone-director-ux-architecture',
+    company: 'SentinelOne',
+    role: 'Director, Product Design & UX Architecture',
+    score: 4.4,
+    status: 'New',
+    source: 'Simulated VC portfolio board',
+    lane: 'Enterprise UX architecture',
+    comp: '$241k-$249k + equity',
+    signals: ['AI cybersecurity', 'UX architecture', 'design org leadership'],
+    discoveryTerms: ['enterprise', 'architecture', 'ai', 'leadership', 'systems', 'security'],
+    reason: 'Maps well to regulated complexity, systems thinking, and senior cross-functional design influence.',
+    risk: 'Cybersecurity domain fit should be stress-tested before tailoring.',
+  },
+  {
+    id: 'webflow-principal-product-designer',
+    company: 'Webflow',
+    role: 'Principal Product Designer',
+    score: 4.3,
+    status: 'New',
+    source: 'Simulated Greenhouse discovery',
+    lane: 'AI design systems',
+    comp: '$206k-$344k',
+    signals: ['agentic experiences', 'component systems', 'accessibility'],
+    discoveryTerms: ['ai', 'agentic', 'design', 'systems', 'accessibility', 'components'],
+    reason: 'Clear overlap with AI-augmented design operations, component-based product UX, and accessibility quality.',
+    risk: 'Role may skew hands-on IC rather than design-practice leadership.',
+  },
+  {
+    id: 'butterflymx-principal-product-designer-pm',
+    company: 'ButterflyMX',
+    role: 'Principal Product Designer & Product Manager',
+    score: 3.9,
+    status: 'New',
+    source: 'Simulated Ashby discovery',
+    lane: 'AI product ownership',
+    comp: 'Not confirmed',
+    signals: ['AI-forward', 'product ownership', 'design standards'],
+    discoveryTerms: ['ai', 'product', 'ownership', 'standards', 'proptech', 'design'],
+    reason: 'Interesting hybrid product/design ownership role with room to shape standards and AI workflows.',
+    risk: 'Hybrid PM scope could dilute senior UX leadership lane.',
+  },
+  {
+    id: 'servicenow-senior-manager-design-systems',
+    company: 'ServiceNow',
+    role: 'Senior Manager, Design Systems',
+    score: 4.5,
+    status: 'New',
+    source: 'Simulated enterprise careers scan',
+    lane: 'Design systems leadership',
+    comp: '$210k-$305k',
+    signals: ['workflow platform', 'governance', 'component adoption'],
+    discoveryTerms: ['design', 'systems', 'governance', 'enterprise', 'workflow', 'manager'],
+    reason: 'High overlap with scaling component governance, design practice maturity, and enterprise workflow quality.',
+    risk: 'Confirm whether the role owns product-quality outcomes or mainly design operations throughput.',
+  },
+  {
+    id: 'addepar-staff-product-designer-platform',
+    company: 'Addepar',
+    role: 'Staff Product Designer, Platform',
+    score: 4.2,
+    status: 'New',
+    source: 'Simulated fintech ATS scan',
+    lane: 'Complex platform UX',
+    comp: '$185k-$260k',
+    signals: ['regulated financial workflows', 'data-heavy UX', 'platform systems'],
+    discoveryTerms: ['regulated', 'enterprise', 'platform', 'data', 'workflow', 'systems'],
+    reason: 'Complex, regulated decision-support workflows make a credible bridge from compliance product design.',
+    risk: 'Financial-services domain proof should be positioned without overclaiming prior scope.',
+  },
+  {
+    id: '18f-product-design-lead',
+    company: '18F',
+    role: 'Product Design Lead',
+    score: 4.1,
+    status: 'New',
+    source: 'Simulated GovTech board scan',
+    lane: 'GovTech service design',
+    comp: 'Public-sector band varies',
+    signals: ['public services', 'accessibility', 'policy complexity'],
+    discoveryTerms: ['govtech', 'government', 'public', 'accessibility', 'policy', 'service'],
+    reason: 'Strong mission and accessibility fit with design leadership in public-sector complexity.',
+    risk: 'Compensation and federal hiring constraints need early verification.',
+  },
+  {
+    id: 'workiva-principal-product-designer-compliance',
+    company: 'Workiva',
+    role: 'Principal Product Designer, Compliance Platform',
+    score: 4.4,
+    status: 'New',
+    source: 'Simulated compliance SaaS scan',
+    lane: 'RegTech product design',
+    comp: '$170k-$250k',
+    signals: ['compliance workflows', 'audit trails', 'enterprise SaaS'],
+    discoveryTerms: ['regtech', 'compliance', 'regulated', 'enterprise', 'audit', 'workflow'],
+    reason: 'Excellent semantic match for compliance-centered product quality and cross-functional workflow design.',
+    risk: 'Need to verify authority level and whether design systems work is central or adjacent.',
+  },
+];
+
 const searchStarters = [
   'Design systems leadership',
   'Accessibility compliance',
@@ -94,6 +213,45 @@ const searchStarters = [
   'GovTech / RegTech UX',
   'Enterprise UX architecture',
 ];
+
+const searchStopWords = new Set(['and', 'for', 'or', 'the', 'to', 'ux', 'job', 'jobs', 'role', 'roles']);
+
+function getSearchTokens(value: string) {
+  return value
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length > 1 && !searchStopWords.has(token));
+}
+
+function getInitialDiscoveryJobs() {
+  return discoveryCatalog.slice(0, 4).map(({ discoveryTerms: _terms, ...job }) => job);
+}
+
+function getSimulatedDiscoveryResults(query: string, criteria: string) {
+  const tokens = getSearchTokens(`${query} ${criteria}`);
+
+  return discoveryCatalog
+    .map((candidate, index) => {
+      const semanticHits = candidate.discoveryTerms.filter((term) =>
+        tokens.some((token) => term.includes(token) || token.includes(term)),
+      ).length;
+      const score = Math.min(4.9, candidate.score + semanticHits * 0.05);
+      const source = `${candidate.source} - internet discovery simulation`;
+      const { discoveryTerms: _terms, ...job } = candidate;
+
+      return {
+        job: {
+          ...job,
+          score,
+          source,
+        },
+        rank: semanticHits * 10 + candidate.score - index * 0.01,
+      };
+    })
+    .sort((a, b) => b.rank - a.rank)
+    .slice(0, 4)
+    .map(({ job }) => job);
+}
 
 function Icon({ name }: { name: 'search' | 'briefcase' | 'letter' | 'archive' | 'spark' | 'sun' | 'moon' }) {
   const paths = {
@@ -251,11 +409,15 @@ function JobDetailPanel({
   mode,
   showCoverLetter,
   onToggleCoverLetter,
+  isSaved = false,
+  onSaveRole,
 }: {
   job: Job;
   mode: 'match' | 'application';
   showCoverLetter: boolean;
   onToggleCoverLetter: () => void;
+  isSaved?: boolean;
+  onSaveRole?: () => void;
 }) {
   return (
     <aside className={styles.detailPanel}>
@@ -295,7 +457,13 @@ function JobDetailPanel({
         ))}
       </div>
       <div className={`${styles.actionRow} ${styles.detailActions}`}>
-        <Button emphasis="mid">{mode === 'application' ? 'Update status' : 'Evaluate'}</Button>
+        <Button
+          emphasis="mid"
+          disabled={mode === 'match' && isSaved}
+          onClick={mode === 'match' ? onSaveRole : undefined}
+        >
+          {mode === 'application' ? 'Update status' : isSaved ? 'Saved' : 'Save role'}
+        </Button>
         <Button emphasis="low" onClick={onToggleCoverLetter}>
           {showCoverLetter ? 'Hide letter' : 'Draft letter'}
         </Button>
@@ -316,22 +484,87 @@ function JobDetailPanel({
 
 export default function Home() {
   const [activeView, setActiveView] = useState<ViewId>('find');
-  const [selectedJobId, setSelectedJobId] = useState(jobs[0].id);
+  const [discoveredJobs, setDiscoveredJobs] = useState<Job[]>(() => getInitialDiscoveryJobs());
+  const [savedRoles, setSavedRoles] = useState<Job[]>(savedApplicationJobs);
+  const [selectedDiscoveryJobId, setSelectedDiscoveryJobId] = useState(getInitialDiscoveryJobs()[0].id);
+  const [selectedApplicationJobId, setSelectedApplicationJobId] = useState(savedApplicationJobs[0].id);
   const [showSearchSpec, setShowSearchSpec] = useState(false);
   const [showCoverLetter, setShowCoverLetter] = useState(false);
   const [searchQuery, setSearchQuery] = useState('Design systems / accessibility / AI leadership');
+  const [lastDiscoveryQuery, setLastDiscoveryQuery] = useState('Design systems / accessibility / AI leadership');
+  const [isSearching, setIsSearching] = useState(false);
   const [criteria, setCriteria] = useState(
     'UX leadership, design systems governance, accessibility as product quality, AI-augmented design operations, GovTech/RegTech or complex enterprise workflows',
   );
 
-  const selectedJob = jobs.find((job) => job.id === selectedJobId) ?? jobs[0];
+  const hasPendingDiscoveryQuery = searchQuery.trim() !== lastDiscoveryQuery.trim();
+  const selectedDiscoveryJob =
+    discoveredJobs.find((job) => job.id === selectedDiscoveryJobId) ?? discoveredJobs[0];
+  const selectedApplicationJob =
+    savedRoles.find((job) => job.id === selectedApplicationJobId) ?? savedRoles[0];
+
   const workflowTabs = useMemo<TabItem[]>(
     () => [
-      { id: 'find', label: 'Find Jobs', badge: jobs.length },
-      { id: 'applications', label: 'Applications', badge: jobs.length },
+      { id: 'find', label: 'Find Jobs', badge: discoveredJobs.length },
+      { id: 'applications', label: 'Applications', badge: savedRoles.length },
     ],
-    [],
+    [discoveredJobs.length, savedRoles.length],
   );
+
+  const runSearch = () => {
+    if (isSearching) {
+      return;
+    }
+
+    const nextQuery = searchQuery.trim() || 'UX leadership design systems accessibility';
+
+    setActiveView('find');
+    setSearchQuery(nextQuery);
+    setIsSearching(true);
+    setShowCoverLetter(false);
+
+    window.setTimeout(() => {
+      const nextJobs = getSimulatedDiscoveryResults(nextQuery, criteria);
+      setDiscoveredJobs(nextJobs);
+      setSelectedDiscoveryJobId(nextJobs[0].id);
+      setLastDiscoveryQuery(nextQuery);
+      setIsSearching(false);
+    }, 850);
+  };
+
+  const saveDiscoveredRole = (job: Job) => {
+    setSavedRoles((currentRoles) => {
+      if (currentRoles.some((role) => role.id === job.id)) {
+        return currentRoles;
+      }
+
+      return [
+        {
+          ...job,
+          status: 'Review',
+          source: `Saved from ${job.source}`,
+        },
+        ...currentRoles,
+      ];
+    });
+    setSelectedApplicationJobId(job.id);
+  };
+
+  useEffect(() => {
+    if (discoveredJobs.length === 0 || discoveredJobs.some((job) => job.id === selectedDiscoveryJobId)) {
+      return;
+    }
+
+    setSelectedDiscoveryJobId(discoveredJobs[0].id);
+  }, [discoveredJobs, selectedDiscoveryJobId]);
+
+  useEffect(() => {
+    if (savedRoles.length === 0 || savedRoles.some((job) => job.id === selectedApplicationJobId)) {
+      return;
+    }
+
+    setSelectedApplicationJobId(savedRoles[0].id);
+  }, [savedRoles, selectedApplicationJobId]);
 
   useEffect(() => {
     if (!showSearchSpec) {
@@ -385,13 +618,13 @@ export default function Home() {
         header: 'Detail',
         align: 'right',
         render: (job) => (
-          <Button emphasis="low" onClick={() => setSelectedJobId(job.id)}>
-            {job.id === selectedJobId ? 'Viewing' : 'Open'}
+          <Button emphasis="low" onClick={() => setSelectedApplicationJobId(job.id)}>
+            {job.id === selectedApplicationJobId ? 'Viewing' : 'Open'}
           </Button>
         ),
       },
     ],
-    [selectedJobId],
+    [selectedApplicationJobId],
   );
 
   return (
@@ -421,19 +654,35 @@ export default function Home() {
             className={styles.searchInput}
             value={searchQuery}
             onChange={(event: ChangeEvent<HTMLInputElement>) => setSearchQuery(event.currentTarget.value)}
-            placeholder="Search by role, lane, company, or signals"
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                runSearch();
+              }
+            }}
+            placeholder="Search the open internet by lane, company, or signals"
+            aria-describedby="search-run-status"
           />
-          <Button emphasis="high" leftIcon={<Icon name="search" />}>
-            Search
+          <Button emphasis="high" leftIcon={<Icon name="search" />} disabled={isSearching} onClick={runSearch}>
+            {isSearching ? 'Searching' : 'Search'}
           </Button>
         </div>
+        <p id="search-run-status" className={styles.searchMeta} aria-live="polite">
+          {isSearching
+            ? 'Searching employer pages, portfolio boards, ATS postings, and job indexes.'
+            : hasPendingDiscoveryQuery
+              ? 'Query edited. Search will run a new discovery pass.'
+              : `Showing simulated discovery results for "${lastDiscoveryQuery}".`}
+        </p>
         <ChipGroup className={styles.starterChips} aria-label="Conversation starters">
           {searchStarters.map((starter) => (
             <Chip
               key={starter}
               size="md"
               selected={searchQuery === starter}
-              onSelect={() => setSearchQuery(starter)}
+              onSelect={() => {
+                setSearchQuery(starter);
+                setActiveView('find');
+              }}
             >
               {starter}
             </Chip>
@@ -491,58 +740,73 @@ export default function Home() {
         </div>
       </section>
 
-      {activeView === 'find' && (
-        <>
-          <section className={styles.findGrid}>
-            <div className={styles.resultsColumn}>
-              <div className={styles.matchList}>
-                {jobs.map((job) => (
-                  <MatchCard
-                    key={job.id}
-                    job={job}
-                    selected={job.id === selectedJobId}
-                    onSelect={() => setSelectedJobId(job.id)}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <JobDetailPanel
-              job={selectedJob}
-              mode="match"
-              showCoverLetter={showCoverLetter}
-              onToggleCoverLetter={() => setShowCoverLetter((value) => !value)}
-            />
-          </section>
-        </>
-      )}
-
-      {activeView === 'applications' && (
-        <section className={styles.applicationsView}>
-          <div className={styles.applicationsActions}>
-            <Button emphasis="mid">Add role</Button>
+      <section className={styles.findGrid} hidden={activeView !== 'find'}>
+        <div className={styles.resultsColumn} aria-busy={isSearching}>
+          <div
+            className={`${styles.loadingState} ${isSearching ? '' : styles.loadingStateHidden}`}
+            role="status"
+            aria-live="polite"
+          >
+            <strong>Running discovery</strong>
+            <p>Simulating a fresh internet/job-board search from the current query and semantic criteria.</p>
           </div>
-          <div className={styles.applicationsLayout}>
-            <div className={styles.applicationTablePanel}>
-              <DataTable
-                columns={applicationColumns}
-                data={jobs}
-                rowKey={(job: Job) => job.id}
-                display="auto"
-                density="comfortable"
-                hoverable
-                caption="Applied jobs"
-              />
+          {discoveredJobs.length > 0 ? (
+            <div className={styles.matchList}>
+              {discoveredJobs.map((job) => (
+                <MatchCard
+                  key={job.id}
+                  job={job}
+                  selected={job.id === selectedDiscoveryJobId}
+                  onSelect={() => setSelectedDiscoveryJobId(job.id)}
+                />
+              ))}
             </div>
+          ) : (
+            <div className={styles.emptyState}>
+              <strong>No matches yet</strong>
+              <p>Try a broader lane, company, role, or signal.</p>
+            </div>
+          )}
+        </div>
+
+        {selectedDiscoveryJob && (
+          <JobDetailPanel
+            job={selectedDiscoveryJob}
+            mode="match"
+            showCoverLetter={showCoverLetter}
+            onToggleCoverLetter={() => setShowCoverLetter((value) => !value)}
+            isSaved={savedRoles.some((role) => role.id === selectedDiscoveryJob.id)}
+            onSaveRole={() => saveDiscoveredRole(selectedDiscoveryJob)}
+          />
+        )}
+      </section>
+
+      <section className={styles.applicationsView} hidden={activeView !== 'applications'}>
+        <div className={styles.applicationsActions}>
+          <Button emphasis="mid">Add role</Button>
+        </div>
+        <div className={styles.applicationsLayout}>
+          <div className={styles.applicationTablePanel}>
+            <DataTable
+              columns={applicationColumns}
+              data={savedRoles}
+              rowKey={(job: Job) => job.id}
+              display="auto"
+              density="comfortable"
+              hoverable
+              caption="Saved roles"
+            />
+          </div>
+          {selectedApplicationJob && (
             <JobDetailPanel
-              job={selectedJob}
+              job={selectedApplicationJob}
               mode="application"
               showCoverLetter={showCoverLetter}
               onToggleCoverLetter={() => setShowCoverLetter((value) => !value)}
             />
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
 
     </main>
   );

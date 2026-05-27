@@ -61,7 +61,7 @@
 }
 
 .navBand {
-  padding: 0 0 18px;
+  padding: 0 0 8px;
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -99,6 +99,7 @@
 .applicationsView {
   max-width: 1440px;
   margin-inline: auto;
+  position: relative;
 }
 
 .applicationsLayout {
@@ -139,6 +140,27 @@
   gap: 10px;
 }
 
+.emptyState {
+  border: 1px dashed var(--lumen-border-lowEmphasis-onLight, #d9dfda);
+  border-radius: 18px;
+  padding: 22px;
+  color: var(--lumen-text-midEmphasis-onLight, #52605a);
+}
+
+.emptyState strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--lumen-text-highEmphasis-onLight, #17211d);
+  font-family: var(--lumen-typo-fontFamilies-display);
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.emptyState p {
+  margin: 0;
+}
+
 .resultsColumn {
   min-width: 0;
 }
@@ -146,7 +168,12 @@
 .applicationsActions {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 12px;
+  height: 0;
+  margin: 0;
+  overflow: visible;
+  position: relative;
+  top: -48px;
+  z-index: 1;
 }
 
 .searchCenter {
@@ -192,6 +219,16 @@
 .starterChips {
   justify-content: center;
   margin-top: 10px;
+}
+
+.searchMeta {
+  min-height: 20px;
+  margin: 8px 18px 0;
+  color: var(--lumen-text-lowEmphasis-onLight, #6f7a75);
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: center;
 }
 
 .srOnly {
@@ -263,6 +300,42 @@
 .matchCardSelected {
   border-color: var(--lumen-brand-default, #00664f);
   background: var(--lumen-selectedHighlight, #e4f5ef);
+}
+
+.loadingState {
+  display: grid;
+  gap: 8px;
+  min-height: 164px;
+  margin-bottom: 10px;
+  padding: 22px;
+  align-content: center;
+  border: 1px solid color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 18%, var(--lumen-border-lowEmphasis-onLight, #d9dfda));
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--lumen-brand-default, #bd5d3a) 8%, transparent), transparent),
+    var(--lumen-surface-light, #ffffff);
+  background-size: 220% 100%;
+  animation: discoverySweep 1.2s ease-in-out infinite;
+}
+
+.loadingStateHidden {
+  display: none;
+}
+
+.loadingState strong {
+  font-family: var(--lumen-typo-fontFamilies-display);
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.loadingState p {
+  max-width: 560px;
+  margin: 0;
+  color: var(--lumen-text-midEmphasis-onLight, #52605a);
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0;
 }
 
 .matchCardHeader,
@@ -419,6 +492,16 @@
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
+}
+
+@keyframes discoverySweep {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -120% 0;
+  }
 }
 
 @media (max-width: 1180px) {
