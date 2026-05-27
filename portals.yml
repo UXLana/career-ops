@@ -1,74 +1,177 @@
-# Lana career-ops scanner seed config.
-# Expand this after the first calibration pass.
+# Lana Career-Ops Job Discovery Configuration
+# This is the center of the system: find high-fit roles first, then evaluate.
+#
+# Used by /career-ops scan.
+# Schema matches modes/scan.md:
+# - title_filter
+# - search_queries
+# - tracked_companies
 
 title_filter:
   positive:
     - "Director of UX"
     - "Director, UX"
+    - "Director of Product Design"
+    - "Design Director"
     - "Head of Design"
     - "Head of UX"
+    - "UX Lead"
+    - "UX Design Lead"
+    - "Senior UX Design Lead"
+    - "Lead Product Designer"
+    - "Principal Product Designer"
+    - "Staff Product Designer"
     - "Design Systems"
     - "Design System"
-    - "Principal Product Designer"
-    - "Lead Product Designer"
-    - "Senior UX Design Lead"
     - "Design Operations"
     - "DesignOps"
     - "Accessibility"
     - "Inclusive Design"
+    - "Compliance"
+    - "GovTech"
+    - "RegTech"
+    - "Civic"
     - "AI Design"
-    - "UX Research Operations"
+    - "AI Workflow"
   negative:
+    - "Junior"
+    - "Intern"
     - "Graphic Designer"
     - "Brand Designer"
     - "Marketing Designer"
-    - "Intern"
-    - "Junior"
     - "Visual Designer"
+    - "Web Designer"
+    - "Motion Designer"
+    - "Content Designer"
+    - "UX Writer"
+    - "Researcher"
+    - "Freelance"
+    - "Contract only"
+  seniority_boost:
+    - "Lead"
+    - "Staff"
+    - "Principal"
+    - "Director"
+    - "Head"
+    - "Manager"
 
-queries:
-  - name: "Design Systems Leadership"
-    query: "\"design systems\" (director OR lead OR principal) product design remote"
-  - name: "Accessibility Product Design"
-    query: "\"accessibility\" \"product design\" (lead OR principal OR director) remote"
-  - name: "GovTech UX Leadership"
-    query: "(govtech OR civic OR government) \"UX\" (lead OR director OR principal) remote"
-  - name: "RegTech UX Leadership"
-    query: "(regtech OR compliance) \"product design\" (lead OR director OR principal) remote"
-  - name: "AI Design Operations"
-    query: "\"AI\" \"design operations\" OR \"design systems\" remote"
+search_queries:
+  - name: Design Systems Leadership
+    query: '("design systems" OR "design system") ("director" OR "principal" OR "lead" OR "staff") ("product design" OR UX) remote'
+    enabled: true
 
-companies:
-  govtech_civic:
-    - name: "18F"
-      careers_url: "https://18f.gsa.gov/join/"
-    - name: "Ad Hoc"
-      careers_url: "https://adhocteam.us/join/"
-    - name: "Nava"
-      careers_url: "https://www.navapbc.com/careers"
-    - name: "Code for America"
-      careers_url: "https://codeforamerica.org/jobs/"
-    - name: "Civis Analytics"
-      careers_url: "https://www.civisanalytics.com/careers/"
-  design_systems_enterprise:
-    - name: "Atlassian"
-      careers_url: "https://www.atlassian.com/company/careers"
-    - name: "ServiceNow"
-      careers_url: "https://careers.servicenow.com/"
-    - name: "Salesforce"
-      careers_url: "https://careers.salesforce.com/"
-    - name: "GitLab"
-      careers_url: "https://about.gitlab.com/jobs/"
-    - name: "Figma"
-      careers_url: "https://www.figma.com/careers/"
-  regulated_platforms:
-    - name: "Workday"
-      careers_url: "https://workday.wd5.myworkdayjobs.com/Workday"
-    - name: "UKG"
-      careers_url: "https://www.ukg.com/careers"
-    - name: "Tyler Technologies"
-      careers_url: "https://www.tylertech.com/careers"
-    - name: "Samsara"
-      careers_url: "https://www.samsara.com/company/careers"
-    - name: "Toast"
-      careers_url: "https://careers.toasttab.com/"
+  - name: Accessibility Product Design
+    query: '("accessibility" OR "inclusive design" OR WCAG OR "Section 508") ("product design" OR UX) ("lead" OR "principal" OR "director") remote'
+    enabled: true
+
+  - name: UX Leadership
+    query: '("Director of UX" OR "Director of Product Design" OR "Head of UX" OR "UX Design Lead") remote'
+    enabled: true
+
+  - name: GovTech UX Leadership
+    query: '(govtech OR civic OR government OR public-sector) (UX OR "product design") ("lead" OR "principal" OR "director") remote'
+    enabled: true
+
+  - name: RegTech Compliance UX
+    query: '(regtech OR compliance OR audit OR regulatory) ("product design" OR UX) ("lead" OR "principal" OR "director") remote'
+    enabled: true
+
+  - name: AI Design Operations
+    query: '("AI" OR "agentic" OR automation) ("design operations" OR "design systems" OR "product design") ("lead" OR "principal" OR "director") remote'
+    enabled: true
+
+  - name: Enterprise SaaS Design Leadership
+    query: '("enterprise SaaS" OR "B2B SaaS") ("Director of Product Design" OR "Principal Product Designer" OR "Design Systems") remote'
+    enabled: true
+
+tracked_companies:
+  - name: 18F
+    careers_url: https://18f.gsa.gov/join/
+    scan_method: playwright
+    notes: Civic technology; strong GovTech alignment.
+    enabled: true
+
+  - name: Ad Hoc
+    careers_url: https://adhocteam.us/join/
+    scan_method: playwright
+    notes: Civic tech and government digital services.
+    enabled: true
+
+  - name: Nava
+    careers_url: https://www.navapbc.com/careers
+    scan_method: playwright
+    notes: Public benefit civic tech; complex public workflows.
+    enabled: true
+
+  - name: Code for America
+    careers_url: https://codeforamerica.org/jobs/
+    scan_method: playwright
+    notes: Civic technology and public services.
+    enabled: true
+
+  - name: Civis Analytics
+    careers_url: https://www.civisanalytics.com/careers/
+    scan_method: playwright
+    notes: Data platform; civic and regulated-sector adjacency.
+    enabled: true
+
+  - name: Tyler Technologies
+    careers_url: https://www.tylertech.com/careers
+    scan_method: playwright
+    notes: GovTech software; strong regulated workflow fit.
+    enabled: true
+
+  - name: ServiceNow
+    careers_url: https://careers.servicenow.com/
+    scan_method: playwright
+    notes: Enterprise workflow platform; design systems and complex UX fit.
+    enabled: true
+
+  - name: Salesforce
+    careers_url: https://careers.salesforce.com/
+    scan_method: websearch
+    scan_query: 'site:careers.salesforce.com ("design systems" OR "product design" OR accessibility OR "UX") ("director" OR "principal" OR "lead")'
+    notes: Enterprise SaaS; design systems and AI workflow adjacency.
+    enabled: true
+
+  - name: Atlassian
+    careers_url: https://www.atlassian.com/company/careers
+    scan_method: playwright
+    notes: Mature enterprise product design and design systems culture.
+    enabled: true
+
+  - name: GitLab
+    careers_url: https://about.gitlab.com/jobs/
+    scan_method: playwright
+    notes: Remote-first enterprise platform.
+    enabled: true
+
+  - name: Figma
+    careers_url: https://www.figma.com/careers/
+    scan_method: playwright
+    notes: Design tooling and design systems adjacency.
+    enabled: true
+
+  - name: Workday
+    careers_url: https://workday.wd5.myworkdayjobs.com/Workday
+    scan_method: playwright
+    notes: Enterprise HR/workforce platform; UKG-adjacent experience fit.
+    enabled: true
+
+  - name: UKG
+    careers_url: https://www.ukg.com/careers
+    scan_method: playwright
+    notes: Prior-domain adjacency; use carefully and avoid overclaiming.
+    enabled: true
+
+  - name: Samsara
+    careers_url: https://www.samsara.com/company/careers
+    scan_method: playwright
+    notes: Complex operations workflows and regulated industries.
+    enabled: true
+
+  - name: Toast
+    careers_url: https://careers.toasttab.com/
+    scan_method: playwright
+    notes: Complex SMB/operations workflows.
+    enabled: true

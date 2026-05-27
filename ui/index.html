@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Career-Ops</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="Career-Ops navigation">
+        <a class="brand" href="#intake" aria-label="Career-Ops home">
+          <span>
+            <strong>Career-Ops</strong>
+            <small>Job search command center</small>
+          </span>
+        </a>
+        <nav>
+          <a href="#find" class="nav-link active">Find Jobs</a>
+          <a href="#intake" class="nav-link">Intake</a>
+          <a href="#tracker" class="nav-link">Tracker</a>
+        </nav>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">UX leadership job command center</p>
+            <h1>Find the right roles. Apply selectively.</h1>
+          </div>
+          <button class="button low" id="refreshButton" type="button">Refresh</button>
+        </header>
+
+        <section class="banner success" id="openBrainBanner">
+          <div class="banner-icon" aria-hidden="true">✓</div>
+          <div>
+            <h2>OpenBrain protocol is wired in</h2>
+            <p id="openBrainCopy">Loading connection status...</p>
+          </div>
+        </section>
+
+        <section class="metrics" aria-label="Pipeline metrics">
+          <article class="stat">
+            <span>Evaluated roles</span>
+            <strong id="trackedCount">0</strong>
+          </article>
+          <article class="stat">
+            <span>Jobs waiting for evaluation</span>
+            <strong id="pendingCount">0</strong>
+          </article>
+          <article class="stat">
+            <span>High-fit evaluated roles</span>
+            <strong id="highFitCount">0</strong>
+          </article>
+        </section>
+
+        <section class="panel" id="find">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Job discovery</p>
+              <h2>Find high-fit roles for Lana</h2>
+            </div>
+          </div>
+          <form id="discoveryForm" class="discovery-form">
+            <div class="field-row">
+              <label class="field">
+                <span>Role lane</span>
+                <select id="roleLane" name="roleLane">
+                  <option>UX Leadership</option>
+                  <option>Design Systems Leadership</option>
+                  <option>Accessibility and Compliance Design</option>
+                  <option>AI-Augmented Design Operations</option>
+                  <option>GovTech / RegTech Product Design</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Location</span>
+                <select id="location" name="location">
+                  <option>Remote, United States</option>
+                  <option>Remote, Americas</option>
+                  <option>Hybrid, South Florida</option>
+                  <option>Open, strong fit only</option>
+                </select>
+              </label>
+            </div>
+            <label class="field wide">
+              <span>Must-have signals</span>
+              <input id="mustHave" name="mustHave" value="design systems, accessibility, UX leadership, complex workflows, enterprise SaaS" />
+            </label>
+            <label class="field wide">
+              <span>Exclude</span>
+              <input id="exclude" name="exclude" value="junior, intern, graphic design, brand-only, production-only UI" />
+            </label>
+            <div class="actions">
+              <button class="button high" type="submit">Build discovery scan</button>
+              <p id="discoveryStatus" role="status"></p>
+            </div>
+          </form>
+          <div class="scan-brief" id="scanBrief" hidden>
+            <h3>Next scan command</h3>
+            <pre>/career-ops scan</pre>
+            <p>The scan should discover roles first, then add promising matches to the pending inbox for evaluation.</p>
+          </div>
+        </section>
+
+        <section class="panel intake" id="intake">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Role intake</p>
+              <h2>Add a job you already found</h2>
+              <p class="section-copy">This saves a job URL or pasted job description into the waiting-for-evaluation inbox. It does not apply or evaluate yet.</p>
+            </div>
+          </div>
+
+          <form id="pipelineForm">
+            <label class="field wide">
+              <span>Job URL or pasted JD</span>
+              <textarea id="source" name="source" rows="10" required placeholder="Paste a job URL, or paste the full job description."></textarea>
+              <small>URLs stay as links. Pasted descriptions are saved into <code>jds/</code> and referenced from the pipeline.</small>
+            </label>
+            <div class="field-row">
+              <label class="field">
+                <span>Company</span>
+                <input id="company" name="company" placeholder="TBD" />
+              </label>
+              <label class="field">
+                <span>Role</span>
+                <input id="role" name="role" placeholder="TBD" />
+              </label>
+            </div>
+            <label class="field wide">
+              <span>Notes</span>
+              <input id="notes" name="notes" placeholder="Source, deadline, referral angle, or why it caught your eye" />
+            </label>
+            <div class="actions">
+              <button class="button high" type="submit">Save to evaluation inbox</button>
+              <p id="formStatus" role="status"></p>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel" id="tracker">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Discovered jobs</p>
+              <h2>Waiting for evaluation</h2>
+              <p class="section-copy">These are jobs found by discovery or manually saved from intake. To score and rank them, send <code>/career-ops pipeline</code> in this chat.</p>
+            </div>
+          </div>
+          <div class="next-step" aria-label="Next step">
+            <span>Next step</span>
+            <code>/career-ops pipeline</code>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <caption>Discovered roles waiting in data/pipeline.md</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Company</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Fit signal</th>
+                  <th scope="col">Source</th>
+                </tr>
+              </thead>
+              <tbody id="pipelineTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Evaluated applications</p>
+              <h2>Evaluated and ranked roles</h2>
+              <p class="section-copy">This fills in after you run the evaluation command on jobs from the waiting list.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <caption>Career applications tracked in data/applications.md</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Company</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Score</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="applicationsTable"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

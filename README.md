@@ -97,6 +97,8 @@ Career-ops is a single slash command with multiple modes:
 
 Or just paste a job URL or description directly -- career-ops auto-detects it and runs the full pipeline.
 
+For Lana's fork, job discovery is the primary workflow. See [docs/JOB_DISCOVERY.md](docs/JOB_DISCOVERY.md) for the practical how-to for finding roles, tuning `portals.yml`, reviewing the inbox, and evaluating promising matches.
+
 ## How It Works
 
 ```

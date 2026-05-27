@@ -89,12 +89,20 @@ Los niveles son aditivos — se ejecutan todos, los resultados se mezclan y dedu
    - `applications.md` → empresa + rol normalizado ya evaluado
    - `pipeline.md` → URL exacta ya en pendientes o procesadas
 
-8. **Para cada oferta nueva que pase filtros**:
+8. **Verificar vigencia antes de añadir**:
+   - NO añadir una oferta solo porque aparece en WebSearch o en un agregador.
+   - Abrir la URL primaria del empleador/ATS cuando sea posible.
+   - Confirmar que hay página activa de puesto y enlace/botón de aplicación.
+   - Si la página devuelve 404, no tiene posting coincidente, o solo existe en caché, registrar en `scan-history.tsv` como `removed_404`, `removed_not_found`, o `verify_before_apply`.
+   - Si la compensación visible está por debajo del piso de Lana, registrar como `skipped_low_comp`.
+   - Si es contrato/consultoría por debajo del umbral de Lana, registrar como `removed_contract_comp_risk`.
+
+9. **Para cada oferta nueva que pase filtros y verificación**:
    a. Añadir a `pipeline.md` sección "Pendientes": `- [ ] {url} | {company} | {title}`
    b. Registrar en `scan-history.tsv`: `{url}\t{date}\t{query_name}\t{title}\t{company}\tadded`
 
-9. **Ofertas filtradas por título**: registrar en `scan-history.tsv` con status `skipped_title`
-10. **Ofertas duplicadas**: registrar con status `skipped_dup`
+10. **Ofertas filtradas por título**: registrar en `scan-history.tsv` con status `skipped_title`
+11. **Ofertas duplicadas**: registrar con status `skipped_dup`
 
 ## Extracción de título y empresa de WebSearch results
 
